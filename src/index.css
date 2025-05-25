@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "Fustat";
+  src:
+    local("Fustat"),
+    url("./assets/fonts/Fustat-VariableFont_wght.ttf") format("truetype");
+}
+
+:root {
+  font-family: Fustat, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #2c2421;
+    background-color: #faf9f9;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
