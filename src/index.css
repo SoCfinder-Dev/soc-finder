@@ -29,3 +29,18 @@
     color: #747bff;
   }
 }
+
+/* 
+ * FIXME:
+ * This disrespects user dark theme preferences and forces light theme
+ * maybe dark theme instead of this */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #2c2421;
+    background-color: #faf9f9;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
