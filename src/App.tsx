@@ -4,6 +4,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import "./App.css";
 
+import { filterCasIntoSoc, providerName } from "./socSources.tsx";
 import { getSocName } from "./requests.tsx";
 import Header from "./components/Header";
 import FdsInput from "./components/FdsInput";
@@ -52,7 +53,7 @@ function App() {
   }
 
   // Find every CAS that are in pdf, CAS are searched up to bottom,
-  // line by line, using regexes 
+  // line by line, using regexes
   // This method can causes problems with certain pdfs types:
   //  1. Line wrap during CAS number
   //  2. One of "-—0123456789" just before the CAS number
@@ -112,6 +113,12 @@ function App() {
         casId: cas,
         casName: "", // To be filled by API
         isSoc: dangerCas.has(cas),
+        // String containing the organization that classified this cas as SoC
+        // will be undefined if this not a SoC / will be empty array if no source is
+        // provided in excel
+        socSources: dangerCas
+          .get(cas)
+          ?.map((idSource) => providerName[idSource]),
       };
       pdfObject.socNb += dangerCas.has(cas);
       pdfObject.cas.push(casObject);
@@ -159,7 +166,7 @@ function App() {
       pdfObjects.sort((a, b) => b.socNb - a.socNb);
       setPdfObjects(pdfObjects);
       setStatus("processed");
-      console.log(pdfObjects) // left intentionally for logging purposes
+      console.log(pdfObjects); // left intentionally for logging purposes
     });
   }
 
@@ -181,17 +188,9 @@ function App() {
       ).arrayBuffer();
       const workbook = XLSX.read(data, { dense: true });
       let dangerCas = new Set();
-      for (let i = 1; i < workbook.Sheets.Sheet1["!data"].length; i++) {
-        // filter everything that is not a CAS number on the first col of
-        // the spreadsheet
-        if (
-          !isNaN(parseInt(workbook.Sheets.Sheet1["!data"][i][0].v.charAt(0)))
-        ) {
-          dangerCas.add(workbook.Sheets.Sheet1["!data"][i][0].v);
-        }
-      }
+      const socs = filterCasIntoSoc(workbook);
       if (!isCancelled) {
-        setDangerCas(dangerCas);
+        setDangerCas(socs);
       }
     };
     fetchList();

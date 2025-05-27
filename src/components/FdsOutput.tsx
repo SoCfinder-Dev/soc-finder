@@ -66,22 +66,17 @@ function PdfRow({ pdfObject, casCount, dangerCasCount }) {
         hidden={!isExpanded}
       >
         {pdfObject.cas.length === 0 && (
-          <div
-            className="grid grid-cols-8 gap-8"
-          >
-            <p className="pl-8 bg-inherit text-base truncate col-span-2">
+          <div className="grid grid-cols-8 gap-8">
+            <p className="pl-8 bg-inherit text-base truncate col-span-2">-</p>
+            <p className="bg-inherit text-base col-span-2 truncate text-left">
               -
             </p>
-            <p
-              className="bg-inherit text-base col-span-2 truncate text-left"
-            >
-              -
-            </p>
-            <p className="bg-inherit text-base col-span-2 text-gray">-</p>
-            <div className="col-span-1"></div>
+            <div className="bg-inherit col-span-3 grid grid-cols-5 gap-3">
+              <p className="bg-inherit text-base col-span-1 text-gray">-</p>
+              <p className="bg-inherit text-base col-span-4 text-gray">-</p>
+            </div>
           </div>
-
-            )}
+        )}
         {pdfObject.cas.map((singleCas, i) => (
           <div
             className="grid grid-cols-8 gap-8"
@@ -96,18 +91,29 @@ function PdfRow({ pdfObject, casCount, dangerCasCount }) {
             >
               {singleCas.casName}
             </p>
-            {singleCas.isSoc ? (
-              <p className="bg-inherit text-base col-span-2 text-red flex gap-2">
-                <img
-                  className={imgClass}
-                  src={warn}
-                ></img>{" "}
-                SOC
-              </p>
-            ) : (
-              <p className="bg-inherit text-base col-span-2 text-gray">-</p>
-            )}
-            <div className="col-span-1"></div>
+            <div className="bg-inherit col-span-3 grid grid-cols-5 gap-3">
+              {singleCas.isSoc ? (
+                <>
+                  <p className="col-span-1 bg-inherit text-base text-red flex gap-2">
+                    <img
+                      className={imgClass}
+                      src={warn}
+                    ></img>{" "}
+                    SoC
+                  </p>
+                  <p className="col-span-4 bg-inherit text-base text-gray truncate">
+                    {singleCas.socSources.length > 0
+                      ? "Source: " + singleCas.socSources.join(", ")
+                      : "-"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="bg-inherit text-base col-span-1 text-gray">-</p>
+                  <p className="bg-inherit text-base col-span-4 text-gray">-</p>
+                </>
+              )}
+            </div>
           </div>
         ))}
       </div>
