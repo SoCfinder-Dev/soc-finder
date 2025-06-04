@@ -29,8 +29,9 @@ function FdsInput({ handleFilesChange, nbSoc, status, setStatus }) {
         <h2 className="text-2xl">Glissez et déposez vos FDS</h2>
         <button
           onClick={() => ref.current.click()}
-          className={`flex justify-center gap-1 py-1 px-2 cursor-pointer \
-                      border-[0.5px] border-gray rounded-md items-center`}
+          className={`flex justify-center gap-1 px-3 cursor-pointer \
+                      border-[0.5px] border-gray rounded-md items-center \
+                      hover:bg-faded-gray transition-colors`}
         >
           <img src={clipboard}></img>
           <p className="text-sm pt-[2px]">Ajoutez vos FDS</p>
@@ -89,7 +90,8 @@ function FdsInput({ handleFilesChange, nbSoc, status, setStatus }) {
             <button
               className={`flex flex-grow items-center gap-[0.38rem] py-1 px-2 \
             content-center border-[0.5px] border-green rounded-md \
-            bg-faded-green text-green cursor-pointer`}
+            bg-faded-green text-green cursor-pointer hover:bg-vfaded-green \
+            transition-colors`}
               onClick={() => setStatus("advanced")}
             >
               <img

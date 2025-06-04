@@ -1,5 +1,5 @@
 // Soc sources names, in the order that they appear on the excel file
-export const providerName = [
+export const providerNames = [
   "CLP",
   "REACH SVHC",
   "REACH Restricties",
@@ -16,7 +16,7 @@ export function filterCasIntoSoc(workbook) {
     if (!isNaN(parseInt(workbook.Sheets.Sheet1["!data"][i][0].v.charAt(0)))) {
       const sources = [];
       // if the associated column contains "Ja", then we know it is the cas source
-      for (let j = 0; j < providerName.length; j++) {
+      for (let j = 0; j < providerNames.length; j++) {
         if (
           workbook.Sheets.Sheet1["!data"][i][j + 4].v.toLowerCase() === "ja"
         ) {

@@ -4,7 +4,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import "./App.css";
 
-import { filterCasIntoSoc, providerName } from "./socSources.tsx";
+import { filterCasIntoSoc, providerNames } from "./socSources.tsx";
 import { getSocName } from "./requests.tsx";
 import Header from "./components/Header";
 import FdsInput from "./components/FdsInput";
@@ -113,12 +113,10 @@ function App() {
         casId: cas,
         casName: "", // To be filled by API
         isSoc: dangerCas.has(cas),
-        // String containing the organization that classified this cas as SoC
+        // id of the organization that classified this cas as SoC
         // will be undefined if this not a SoC / will be empty array if no source is
         // provided in excel
-        socSources: dangerCas
-          .get(cas)
-          ?.map((idSource) => providerName[idSource]),
+        socSources: dangerCas.get(cas)?.map((idSource) => idSource),
       };
       pdfObject.socNb += dangerCas.has(cas);
       pdfObject.cas.push(casObject);

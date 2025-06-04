@@ -3,6 +3,9 @@
 @theme {
   --color-red: #d72638;
   --color-gray: #bdbab9;
+  --color-faded-gray: #bdbab933;
   --color-green: #59c173;
   --color-faded-green: #59c1730d;
+  --color-vfaded-green: #59c17333;
+  --color-stone: #faf9f9;
 }
