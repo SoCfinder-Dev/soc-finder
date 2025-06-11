@@ -177,9 +177,6 @@ function FdsOutput({ pdfObjects, goBackHome }) {
     return () => setFilteredPdfObjects(pdfObjects);
   }, [isSourceVisibleMap]);
 
-  console.log(pdfObjects);
-  console.log(filteredPdfObjects);
-
   const casCounts = filteredPdfObjects.map((pdfObject) => pdfObject.cas.length);
   const dangerCasCounts = filteredPdfObjects.map(
     (pdfObject) => pdfObject.cas.filter((cas) => cas.isSoc).length,
