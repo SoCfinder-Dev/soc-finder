@@ -4,7 +4,12 @@ import searchIcon from "/src/assets/searchIcon.svg";
 import cross from "/src/assets/cross.svg";
 import clipboard from "/src/assets/clipboard.svg";
 
-function handleDrop(event, setIsDragEnter, addToUserPdfs, setIsIncorrectType) {
+function handleDrop(
+  event,
+  setIsDragEnter,
+  handleFilesChange,
+  setIsIncorrectType,
+) {
   setIsDragEnter(false);
   event.stopPropagation();
   event.preventDefault();
@@ -13,21 +18,16 @@ function handleDrop(event, setIsDragEnter, addToUserPdfs, setIsIncorrectType) {
   const toAdd = [];
 
   for (const item of event.dataTransfer.items) {
-    if (item.type !== "application/pdf") {
-      incorrect = true;
-    } else {
+    if (item.type == "application/pdf") {
       toAdd.push(item.getAsFile());
     }
   }
 
-  addToUserPdfs(toAdd);
-  setIsIncorrectType(incorrect);
+  handleFilesChange(toAdd);
 }
 
 function PdfSelecter({ handleFilesChange, setStatus }) {
   const [isDragEnter, setIsDragEnter] = useState(false);
-  const [userPdfs, setUserPdfs] = useState([]);
-  const [isIncorrectType, setIsIncorrectType] = useState(false);
 
   let ref = useRef(null);
 
@@ -39,14 +39,10 @@ function PdfSelecter({ handleFilesChange, setStatus }) {
       onDragEnter={(e) => setIsDragEnter(true)}
       onDragLeave={(e) => setIsDragEnter(false)}
       onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) =>
-        handleDrop(
-          e,
-          setIsDragEnter,
-          (pdf) => setUserPdfs([...userPdfs, ...pdf]),
-          setIsIncorrectType,
-        )
-      }
+      onDrop={(e) => {
+        setStatus("processing");
+        handleDrop(e, setIsDragEnter, handleFilesChange, setIsIncorrectType);
+      }}
     >
       <h2 className="text-2xl">Glissez et déposez vos FDS</h2>
       <input
@@ -57,7 +53,8 @@ function PdfSelecter({ handleFilesChange, setStatus }) {
         accept=".pdf"
         multiple
         onChange={(e) => {
-          setUserPdfs([...e.target.files]);
+          setStatus("processing");
+          handleFilesChange([...e.target.files]);
         }}
       />
       <button
@@ -69,43 +66,6 @@ function PdfSelecter({ handleFilesChange, setStatus }) {
         <img src={clipboard}></img>
         <p className="text-sm pt-[2px]">Ajoutez vos FDS</p>
       </button>
-      {isIncorrectType && (
-        <p className="text-red">
-          Un des fichiers transférés n'est pas au format PDF
-        </p>
-      )}
-      {userPdfs.length != 0 && (
-        <>
-          <div className="self-stretch px-16 flex flex-wrap items-center">
-            {userPdfs.map((pdf, i) => (
-              <button
-                className={`flex gap-1 py-1 px-2 rounded-md cursor-pointer basis-1/2`}
-                onClick={() => setUserPdfs(userPdfs.toSpliced(i, 1))}
-                key={i}
-              >
-                <img src={cross}></img>
-                <p className="text-xs truncate">{pdf.name}</p>
-              </button>
-            ))}
-          </div>
-          <button
-            className={`flex flex-grow items-center gap-[0.38rem] py-1 px-2 \
-            content-center border-[0.5px] border-gray rounded-md \
-            cursor-pointer hover:bg-faded-gray \
-            transition-colors`}
-            onClick={() => {
-              setStatus("processing");
-              handleFilesChange(userPdfs);
-            }}
-          >
-            <img
-              src={searchIcon}
-              className=""
-            ></img>
-            <p className="text-nowrap text-sm pt-[2px]">Lancer la recherche</p>
-          </button>
-        </>
-      )}
     </div>
   );
 }
